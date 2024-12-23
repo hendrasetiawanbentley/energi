@@ -9,7 +9,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output, State
 
  # Load dataset
-data = pd.read_csv('data/winequality-red.csv')
+data = pd.read_csv('winequality-red.csv')
 # Check for missing values
 data.isna().sum()
 # Remove duplicate data
