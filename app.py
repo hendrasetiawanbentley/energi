@@ -10,6 +10,9 @@ from dash import html, dcc
 import plotly.express as px
 import pandas as pd
 
+
+
+
 #data first chart==============
 # Read the CSV file into a DataFrame
 df = pd.read_csv("WBdata.csv")
@@ -73,6 +76,71 @@ long_format['Average'] = long_format.groupby('Country Name')['Electricity Produc
 
 
 
+#data preparation fourth chart=======================================
+# Read the CSV file into a DataFrame
+iea = pd.read_csv("MES_0924.csv", skiprows=8,encoding='Windows-1252')
+
+# List of top 50 economies (based on World Bank or relevant sources)
+#g20_countries = [
+#    "Argentina", "Australia", "Brazil", "Canada", "China", "France", "Germany", 
+#    "India", "Indonesia", "Italy", "Japan", "Mexico", "Russia", "Saudi Arabia", 
+#    "South Africa", "South Korea", "Turkey", "United Kingdom", "United States"
+#]
+
+# Filter data for top 50 economies
+#iea2 = iea[iea['Country'].isin(g20_countries)]
+iea2 = iea
+#change to date format
+# Convert the 'Time' column from string format to datetime
+iea2['Time'] = pd.to_datetime(iea2['Time'], format='%B %Y')
+
+#to select net electricity production
+iea2 = iea2[iea2["Balance"] == 'Net Electricity Production']
+
+#select only total electricity and renewable electricity
+select1= [
+         "Electricity", "Total Renewables (Hydro, Geo, Solar, Wind, Other)"
+         ]
+iea2 = iea2[iea2['Product'].isin(select1)]
+
+
+#get the percentage
+# Extract the year from 'Time'
+iea2['Year'] = iea2['Time'].dt.year
+iea2 = iea2[iea2['Year'] >= 2020]
+
+
+# Filter the data for the two relevant products: 'Electricity' and 'Total Renewables'
+filtered_data = iea2[iea2['Product'].isin(['Electricity', 'Total Renewables (Hydro, Geo, Solar, Wind, Other)'])]
+
+# Group by 'Country' and 'Year' and sum the 'Value' for each product
+aggregated_data = filtered_data.groupby(['Country', 'Year', 'Product'])['Value'].sum().reset_index()
+
+# Pivot the table to create separate columns for 'Electricity' and 'Total Renewables'
+pivoted_data = aggregated_data.pivot_table(index=['Country', 'Year'], columns='Product', values='Value', aggfunc='sum')
+
+# If you want to combine the sum of 'Electricity' and 'Total Renewables' into a single column, you can do:
+pivoted_data['Renewables_Percentage'] = (pivoted_data['Total Renewables (Hydro, Geo, Solar, Wind, Other)'] /pivoted_data['Electricity'] ) * 100 
+
+pivoted_data_reset = pivoted_data.reset_index()
+# Example: Subset the DataFrame to a few columns
+iea3= pivoted_data_reset[['Country', 'Year', 'Renewables_Percentage']]
+iea3_cleaned = iea3.drop_duplicates()
+
+
+
+#extract year
+country_specific_values = iea3_cleaned[iea3_cleaned['Year'] == 2024][['Country', 'Renewables_Percentage']]
+
+# Merge this data back into the original dataframe based on the 'Country'
+iea3_cleaned = pd.merge(iea3, country_specific_values, on='Country', how='left', suffixes=('', '_average'))
+
+
+iea3_cleaned["average"]=iea3_cleaned["Renewables_Percentage_average"]
+
+
+
+#end of data preparation fourth chart====================================
 
 
 
@@ -163,9 +231,19 @@ fig2.update_layout(
 
 #=================================================================
 
- # Load dataset
-data = pd.read_csv('winequality-red.csv')
 
+
+
+
+
+
+
+
+
+
+
+
+#===========real data prep end===========================================================================
 
 # Create the Dash app
 app = dash.Dash(__name__)
