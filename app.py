@@ -253,9 +253,11 @@ server = app.server
 def filter_data(min_threshold, max_threshold):
     return long_format[(long_format["Average"] > min_threshold) & (long_format["Average"] <= max_threshold)]
 
+def filter_data2(min_threshold, max_threshold):
+    return iea3_cleaned[(iea3_cleaned["average"] > min_threshold) & (iea3_cleaned["average"] <= max_threshold)]
 #======================================================FUNGSION SET END
 
-
+# Layout for the app
 app.layout = html.Div([
     # Header Section
     html.Div([
@@ -267,40 +269,41 @@ app.layout = html.Div([
         html.Div([
             html.Div([
                 html.H4("323,321 (GWh)", style={"color": "#2A3F54"}),
-                html.P("Produksi Tenaga Listrik - 2023", style={"color": "#2A3F54"})
+                html.P("Electricity Production - 2023", style={"color": "#2A3F54"})
             ], className="indicator-box"),
             html.Div([
                 html.H4("60,374.000 (Cub m mn)", style={"color": "#2A3F54"}),
-                html.P("Produksi Gas Alam: OPEC: Produksi yang Dipasarkan - 2023", style={"color": "#2A3F54"})
+                html.P("Natural Gas Production: OPEC: Marketable Production - 2023", style={"color": "#2A3F54"})
             ], className="indicator-box"),
             html.Div([
                 html.H4("21,463.000 (Cub m mn)", style={"color": "#2A3F54"}),
-                html.P("Gas Alam: Ekspor - 2023", style={"color": "#2A3F54"})
+                html.P("Natural Gas: Export - 2023", style={"color": "#2A3F54"})
             ], className="indicator-box"),
             html.Div([
                 html.H4("55.833 (Barrel/Day th)", style={"color": "#2A3F54"}),
-                html.P("Minyak Mentah: Ekspor -  2023", style={"color": "#2A3F54"})
+                html.P("Crude Oil : Export -  2023", style={"color": "#2A3F54"})
             ], className="indicator-box"),
             html.Div([
                 html.H4("332.750 (Barrel/Day th)", style={"color": "#2A3F54"}),
-                html.P("Minyak Mentah: Impor -  2023", style={"color": "#2A3F54"})
+                html.P("Crude Oil: Import -  2023", style={"color": "#2A3F54"})
             ], className="indicator-box"),
             html.Div([
                 html.H4("1,603.769 (Barrel/Day th)", style={"color": "#2A3F54"}),
-                html.P("Konsumsi Minyak - 2023", style={"color": "#2A3F54"})
+                html.P("Oil Consumption - 2023", style={"color": "#2A3F54"})
             ], className="indicator-box"),
             html.Div([
                 html.H4("775.182 (Tonne mn)", style={"color": "#2A3F54"}),
-                html.P("Produksi Batubara - 2023", style={"color": "#2A3F54"})
+                html.P("Coal Production - 2023", style={"color": "#2A3F54"})
             ], className="indicator-box"),
             html.Div([
                 html.H4("61.558 (TOE mn)", style={"color": "#2A3F54"}),
-                html.P("Konsumsi Batubara - 2018", style={"color": "#2A3F54"})
+                html.P("Coal Consumption - 2018", style={"color": "#2A3F54"})
             ], className="indicator-box"),
         ], style={"display": "grid", "gridTemplateColumns": "repeat(4, 1fr)", "gap": "20px", "padding": "20px"}),
     ], style={"padding": "20px", "backgroundColor": "#F7F7F7"}),
 
 
+#start of new section========================================================
 html.Div(
     style={"display": "grid", "gridTemplateColumns": "repeat(5, 1fr)", "gap": "20px", "padding": "20px"},
     children=[
@@ -349,7 +352,10 @@ html.Div(
         
     ],
 ),
-
+#====================end of section=================================
+# Subheading using an HTML <h2> tag
+ html.H2("Renewable Energy Production, Energy Import, and Energy Intensity (World Bank Data)", style={'textAlign': 'center', 'color': 'gray'}),
+#the next phase of section==========================================
 
 
 
@@ -417,15 +423,151 @@ html.Div(
            dcc.Graph(figure=fig2),   
            ], style={"flex": "1", "padding": "10px"}),
        ], style={"display": "flex", "flexDirection": "row", "gap": "20px"}),
-
+   #===============================end of object row=====================================
    
-   #=============================new object row 
+   
+   
+   
+   
+   #=============================new object row ===========================
+   # Charts Section (Two Rows with Three Charts Each)
+     html.Div([
+         #=============
+         html.Div([
+         #============================================================
+         html.Div(
+             children=[            
+             html.Div(
+                 children="Correlation Heatmap 2015 (Source of Electricity, Energy Import and Intensity, and Fossil Fuel Consumption)",
+                 style={"paddingRight": "10px", "textAlign": "right", "lineHeight": "40px","fontSize": "15px","color": "Black"}  # Adjust line height for better vertical alignment
+             ),
+             
+             ],
+             style={
+                 "display": "flex",              # Align elements horizontally
+                 "alignItems": "center",         # Vertically center items in the flex container
+                 "justifyContent": "flex-start", # Align items to the left
+                 "width": "100%",                 # Adjust the width of the flex container
+                 "margin": "auto",
+             }
+         ),
+         html.Img(src="/assets/correlation_heatmap_2015.png",
+                  style={
+            "width": "100%",  # Set the width of the image (e.g., 50% of its container)
+            "height": "auto",  # Maintain the aspect ratio
+        })  # Place the image in the 'assets' folder    
+         
+         
+         
+
+         # Placeholder for the graph
+        #graph here
+         
+         #============================================================
+         ], style={"flex": "1", "padding": "10px"}),
+         #===========================================================
+         
+        
+            html.Div([
+             
+             html.Div(
+                 children="Indonesia Correlation (1990 - 2015)",
+                 style={"paddingRight": "10px", "textAlign": "right", "lineHeight": "40px","fontSize": "15px","color": "black"}  # Adjust line height for better vertical alignment
+             ),    
+                
+            html.Img(src="/assets/Indonesia_correlation.png",
+                     style={
+               "width": "100%",  # Set the width of the image (e.g., 50% of its container)
+               "height": "auto",  # Maintain the aspect ratio
+           }),   
+            ], style={"flex": "1", "padding": "10px"}),
+        ], style={"display": "flex", "flexDirection": "row", "gap": "20px"}),
+   
+
+  #=end of section===================================================  
+  # Subheading using an HTML <h2> tag
+   html.H2("Newest Data IEA and Modelling", style={'textAlign': 'center', 'color': 'gray'}),
+  
     
+  #=start of new section===================================================
+  html.Div([
+  
+      html.Div([
+  #=======grafik nya========================================================= 
+  html.Div([
+    html.H1("Percentage Renewable Energy Production of Total Electricity", style={"textAlign": "center","fontSize": "10px"}),
+
+      # Create a div to hold both the text and the dropdown side by side
+      #============================================================
+      html.Div(
+          children=[
+              
+          
+              # Text element
+              html.Div(
+                  children="Average Renewable Energy Production of Total Electricity Across The Period",
+                  style={"paddingRight": "10px", "textAlign": "right", "lineHeight": "40px","fontSize": "10px"}  # Adjust line height for better vertical alignment
+              ),
+
+              # Dropdown element
+              dcc.Dropdown(
+                  id="threshold-filter2",
+                  options=[
+                      {"label": "0% - 25%", "value": "0-25"},
+                      {"label": "26% - 49%", "value": "26-49"},
+                      {"label": "50% - 60%", "value": "50-60"},
+                      {"label": "60% - 100%", "value": "60-100"}
+                  ],
+                  value="0-25",
+                  placeholder="Select Range",
+                  style={
+                      "width": "100px",  # Set a specific width for the dropdown
+                      "height": "40px",  # Adjust height to match the text height
+                      "margin": "auto",
+                      "fontSize": "8px"
+                  }
+              ),
+          ],
+          style={
+              "display": "flex",              # Align elements horizontally
+              "alignItems": "center",         # Vertically center items in the flex container
+              "justifyContent": "flex-start", # Align items to the left
+              "width": "80%",                 # Adjust the width of the flex container
+              "margin": "auto",
+          }
+      ),
+
+      # Placeholder for the graph
+      dcc.Graph(id="line-chart2")
+  ])
+  
+  ], style={"flex": "1", "padding": "10px"}),
+  #============================================================
+  
+  
+  #second row=============================================
+  html.Div([
+   
+   html.Div(
+       children="Indonesia Correlation (1990 - 2015)",
+       style={"paddingRight": "10px", "textAlign": "right", "lineHeight": "40px","fontSize": "15px","color": "black"}  # Adjust line height for better vertical alignment
+   ),    
+      
+  html.Img(src="/assets/Indonesia_correlation.png",
+           style={
+     "width": "100%",  # Set the width of the image (e.g., 50% of its container)
+     "height": "auto",  # Maintain the aspect ratio
+ }),   
+  ], style={"flex": "1", "padding": "10px"}),
+  
+  
+  
+  ], style={"display": "flex", "flexDirection": "row", "gap": "20px"}),
+  
+  
+  #end of section========================================================
     
-    
-    
-  #====================================================  
-    
+  
 ], style={"fontFamily": "Arial, sans-serif"})
 
 
@@ -469,6 +611,46 @@ def update_chart(threshold_key):
     )
 
     return fig
+
+
+#app callback second chart===============================================
+@app.callback(
+    dash.dependencies.Output("line-chart2", "figure"),
+    [dash.dependencies.Input("threshold-filter2", "value")]
+)
+def update_chart2(threshold_key2):
+    # Map string keys to numeric ranges
+    range_mapping = {
+        "0-25": (0, 25),
+        "26-49": (26, 49),
+        "50-60": (50, 60),
+        "60-100": (60, 100)
+    }
+    min_threshold, max_threshold = range_mapping[threshold_key2]
+    filtered_data = filter_data2(min_threshold, max_threshold)
+    fig = px.line(
+        filtered_data,
+        markers=True,
+        #connectgaps=True,
+        x="Year",
+        y="Renewables_Percentage",
+        color="Country",
+        color_discrete_sequence=px.colors.qualitative.Set3,
+        title=f"Average Renewable Energy Production of Total Electricity {min_threshold}% - {max_threshold}%",
+        labels={"Renewables_Percentage (%)": "Renewables_Percentage (%)", "Year": "Year"}
+    )
+    
+    # Update font size for the axis labels, title, and legend
+    fig.update_layout(
+        title_font=dict(size=12),  # Title font size
+        font=dict(size=14),  # Font size for axis labels and tick labels
+        xaxis_title_font=dict(size=12),  # Font size for the X-axis title
+        yaxis_title_font=dict(size=12),  # Font size for the Y-axis title
+        legend_title_font=dict(size=12),  # Font size for legend title
+        legend_font=dict(size=10),  # Font size for legend items
+    )
+    return fig
+
 
 
 if __name__ == '__main__':
